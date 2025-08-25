@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react"; //Maybe you should sort the const and function in a better readable flow so it will be easier to understand the function, maybe even put the helper function in a different file
 import "./App.css";
 
 // Define the categories and colours used in the pie chart
@@ -114,7 +114,7 @@ function App() {
           onChange={handleChange}
         />
         <input
-          name="desc"
+          name="desc"    // i think it is a security problem: inject 
           placeholder="Description"
           value={form.desc}
           onChange={handleChange}
@@ -140,7 +140,7 @@ function App() {
         <button onClick={addTransaction}>Add Expense</button>
       </div>
 
-      {/* Transaction list */}
+      {/* Transaction list */} // i think it would beneficial to maybe use a packge for the table- you could handle info better as an arry of object 
       <table>
         <thead>
           <tr>
