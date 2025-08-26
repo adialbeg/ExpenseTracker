@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
-// Define the categories and colours used in the pie chart
+// Categories and colours for the pie chart legend
 const categories = ["Food", "Transport", "Shopping", "Utilities", "Other"];
 const colors = {
   Food: "#f94144",
@@ -11,7 +11,7 @@ const colors = {
   Other: "#90be6d"
 };
 
-// PieChart component draws a pie chart on a canvas based on totals per category
+// Pie chart component using canvas
 function PieChart({ totals }) {
   const canvasRef = useRef(null);
 
@@ -19,6 +19,7 @@ function PieChart({ totals }) {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+
     const cats = Object.keys(totals);
     const totalAmount = cats.reduce((sum, c) => sum + totals[c], 0);
     let start = -0.5 * Math.PI;
@@ -41,7 +42,7 @@ function PieChart({ totals }) {
   }, [totals]);
 
   return (
-    <div>
+    <div className="chart-container">
       <canvas ref={canvasRef} width={300} height={300}></canvas>
       <div className="legend">
         {Object.entries(totals).map(([cat, total]) => (
@@ -61,25 +62,29 @@ function PieChart({ totals }) {
 }
 
 function App() {
-  // form state for new entry
+  // Form state for new expense
   const [form, setForm] = useState({
     date: "",
     desc: "",
     amount: "",
     category: categories[0]
   });
-  // transactions array
+
+  // Transactions array
   const [transactions, setTransactions] = useState([]);
 
-  // update form fields
+  // Log messages array
+  const [logs, setLogs] = useState([]);
+
+  // Update form fields
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // add a new transaction
+  // Add a new transaction and record a log entry
   const addTransaction = () => {
     const { date, desc, amount, category } = form;
-    if (!desc || !amount) return; // simple validation
+    if (!desc || !amount) return;
     const newTx = {
       id: Date.now(),
       date,
@@ -88,16 +93,32 @@ function App() {
       category
     };
     setTransactions([...transactions, newTx]);
-    // reset form
+    setLogs(current =>
+      current.concat(
+        `Added "${desc}" (₪${parseFloat(amount).toFixed(
+          2
+        )}) in category ${category}${date ? " on " + date : ""}`
+      )
+    );
     setForm({ date: "", desc: "", amount: "", category: categories[0] });
   };
 
-  // remove a transaction by id
+  // Remove a transaction by id and record a log entry
   const removeTransaction = id => {
-    setTransactions(transactions.filter(tx => tx.id !== id));
+    const tx = transactions.find(t => t.id === id);
+    setTransactions(transactions.filter(t => t.id !== id));
+    if (tx) {
+      setLogs(current =>
+        current.concat(
+          `Removed "${tx.desc}" (₪${tx.amount.toFixed(
+            2
+          )}) from category ${tx.category}`
+        )
+      );
+    }
   };
 
-  // compute totals per category
+  // Compute totals per category
   const totals = transactions.reduce((acc, tx) => {
     acc[tx.category] = (acc[tx.category] || 0) + tx.amount;
     return acc;
@@ -166,11 +187,22 @@ function App() {
         </tbody>
       </table>
 
-      {/* Pie chart appears only when there is data */}
+      {/* Pie chart */}
       {transactions.length > 0 && <PieChart totals={totals} />}
+
+      {/* Action log */}
+      {logs.length > 0 && (
+        <div className="logs">
+          <h2>Action Log</h2>
+          <ul>
+            {logs.map((msg, idx) => (
+              <li key={idx}>{msg}</li>
+            ))}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
 
 export default App;
-
