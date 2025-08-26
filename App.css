@@ -40,6 +40,13 @@ th {
   background-color: #f2f2f2;
 }
 
+.chart-container {
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .legend {
   display: flex;
   flex-wrap: wrap;
@@ -58,4 +65,20 @@ th {
   width: 12px;
   height: 12px;
   display: inline-block;
+}
+
+.logs {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+}
+
+.logs ul {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.logs li {
+  margin-bottom: 5px;
 }
