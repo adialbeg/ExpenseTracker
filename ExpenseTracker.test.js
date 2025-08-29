@@ -10,4 +10,5 @@ test('form inputs reset after adding an expense', () => {
     fireEvent.change(screen.getByPlaceholderText(/Amount/i), { target: { value: '15' } });
     fireEvent.change(screen.getByRole('combobox'), { target: { value: 'Other' } });
 });
+// maybe add a mock to make sure that the data is added the way you think it does
 
