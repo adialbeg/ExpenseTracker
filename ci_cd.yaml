@@ -1,0 +1,66 @@
+name: CI/CD Pipeline
+
+# Trigger the workflow on pushes or pull requests to the main branch
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  # Build job: install dependencies and build the React app
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the source code
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      # Set up Node.js environment
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      # Install dependencies for the expense tracker
+      - name: Install dependencies
+        run: npm install
+        working-directory: expense-with-pie
+
+      # Build the React application.  This generates the static files in the
+      # expense-with-pie/dist directory.
+      - name: Build
+        run: npm run build
+        working-directory: expense-with-pie
+
+      # Upload the build output as an artifact so it can be used in the deploy job
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: |
+            expense-with-pie/dist
+
+  # Deploy job: publish the built static files to GitHub Pages
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the repo again so gh-pages can commit from a clean tree
+      - name: Checkout source
+        uses: actions/checkout@v3
+
+      # Download the build artifact produced by the build job
+      - name: Download build artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: dist
+          path: ./dist
+
+      # Deploy to GitHub Pages.  This uses the GitHub token to push the contents of
+      # the dist directory to the gh-pages branch.
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
