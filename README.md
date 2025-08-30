@@ -1,18 +1,23 @@
-💰 Expense Tracker
-A simple and modern React application to track your daily expenses, view them in a clean table, and visualise your spending habits with a built-in pie chart.
+# 💰 Expense Tracker
+
+A simple and modern React application to track your daily expenses, view them in a clean table, and visualise your spending habits with a built-in pie chart.  
 All amounts are displayed in Israeli Shekels (₪) by default.
 
-✨ Features
-Add Expenses: Record a description, amount, category (Food, Transport, Shopping, Utilities, Other), and an optional date.
-Manage Expenses: View your transactions in a table, edit or remove entries easily.
-Visualise Spending: A colour-coded pie chart shows your total spending per category.
-Lightweight: Built with modern React and vanilla HTML5 <canvas> — no external chart libraries required.
-⚙️ Getting Started
-Prerequisites
-Node.js (16+)
-npm
-A code editor (recommended: VS Code)
-Installation
+## ✨ Features
+- **Add Expenses**: Record a description, amount, category (Food, Transport, Shopping, Utilities, Other), and an optional date.
+- **Manage Expenses**: View your transactions in a table, edit or remove entries easily.
+- **Visualise Spending**: A colour-coded pie chart shows your total spending per category.
+- **Lightweight**: Built with modern React and vanilla HTML5 `<canvas>` — no external chart libraries required.
+
+## ⚙️ Getting Started
+
+### Prerequisites
+- Node.js (16+)
+- npm
+- A code editor (recommended: VS Code)
+
+### Installation
+```bash
 # Clone the repo
 git clone https://github.com/username/ExpenseTracker.git
 cd ExpenseTracker
